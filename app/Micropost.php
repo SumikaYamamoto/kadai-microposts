@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Micropost extends Model
+class Kadai extends Model
 {
     protected $fillable = ['content', 'user_id'];
 
