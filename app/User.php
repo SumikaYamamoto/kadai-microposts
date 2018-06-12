@@ -41,13 +41,13 @@ class User extends Authenticatable
     }
     
     public function follow($userId)
-{
+    {
     // confirm if already following
-    $exist = $this->is_following($userId);
+         $exist = $this->is_following($userId);
     // confirming that it is not you
-    $its_me = $this->id == $userId;
+         $its_me = $this->id == $userId;
 
-    if ($exist || $its_me) {
+         if ($exist || $its_me) {
         // do nothing if already following
         return false;
     } else {
@@ -55,14 +55,14 @@ class User extends Authenticatable
         $this->followings()->attach($userId);
         return true;
     }
-}
+    }
 
     public function unfollow($userId)
-{
+    {
     // confirming if already following
-    $exist = $this->is_following($userId);
+         $exist = $this->is_following($userId);
     // confirming that it is not you
-    $its_me = $this->id == $userId;
+        $its_me = $this->id == $userId;
 
 
     if ($exist && !$its_me) {
@@ -73,10 +73,17 @@ class User extends Authenticatable
         // do nothing if not following
         return false;
     }
-}
+    }
 
 
     public function is_following($userId) {
-    return $this->followings()->where('follow_id', $userId)->exists();
-}
+        return $this->followings()->where('follow_id', $userId)->exists();
+    }
+    
+    public function feed_microposts() 
+    {  
+         $follow_user_ids = $this->followings()-> pluck('users.id')->toArray();         
+         $follow_user_ids[] = $this->id;        
+         return Micropost::whereIn('user_id', $follow_user_ids);   
+      } 
 }
